@@ -14,8 +14,13 @@ def initialize_csv():
         pass
 
 # Function to add a budget entry
-def add_entry(description, category, amount, entry_type):
+def add_entry():
     date = datetime.now().strftime('%Y-%m-%d')
+    description = input("Enter the description: ")
+    category = input("Enter the category: ")
+    amount = float(input("Enter the amount: "))
+    entry_type = input("Enter the type (income/expense): ").lower()
+
     with open(FILE_NAME, mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([date, description, category, amount, entry_type])
@@ -44,7 +49,7 @@ def summarize_entries():
                 entry_type = entry[4]
                 if category not in summary:
                     summary[category] = {'income': 0, 'expense': 0}
-                if entry_type.lower() == 'income':
+                if entry_type == 'income':
                     summary[category]['income'] += amount
                 else:
                     summary[category]['expense'] += amount
@@ -57,14 +62,26 @@ def summarize_entries():
 
 if __name__ == '__main__':
     initialize_csv()  # Initialize the CSV file with headers
+    
+    # Main loop to interact with the user
+    while True:
+        print("\n1. Add Entry")
+        print("2. View Entries")
+        print("3. Summarize Entries")
+        print("4. Exit")
+        choice = input("Choose an option: ")
 
-    # Example Usage
-    add_entry('Salary', 'Income', 3000.00, 'income')
-    add_entry('Groceries', 'Food', 200.00, 'expense')
-    add_entry('Electricity Bill', 'Utilities', 150.00, 'expense')
+        if choice == '1':
+            add_entry()
+        elif choice == '2':
+            view_entries()
+        elif choice == '3':
+            summarize_entries()
+        elif choice == '4':
+            break
+        else:
+            print("Invalid option. Please try again.")
 
-    view_entries()  # View all budget entries
-    summarize_entries()  # Summarize budget entries by category
 ##Explanation:
 ##Initialization: Creates a CSV file with headers if it doesn’t exist.
 
